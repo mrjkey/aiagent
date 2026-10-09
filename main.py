@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 import argparse
+from prompts import system_prompt
 
 load_dotenv()
 api_key = os.environ.get("OPENROUTER_API_KEY")
@@ -24,11 +25,13 @@ def main():
     # user_prompt = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
     user_prompt = args.user_prompt
     messages = [
-        {"role": "user", "content": user_prompt}
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt},
     ]
     response = client.chat.completions.create(
         model="openrouter/free",
-        messages=messages
+        messages=messages,
+        temperature=0,
     )
     if response.usage is None:
         raise RuntimeError("response usage was None")

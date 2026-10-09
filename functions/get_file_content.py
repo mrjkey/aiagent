@@ -1,15 +1,10 @@
 import os
+from functions.get_files_info import path_norm_valid
 
 MAX_CHARS=10000
 
 def get_file_content(working_directory: str, file_path: str) -> str:
-    try:
-        abs_working_dir = os.path.abspath(working_directory)
-        full_dir = os.path.join(abs_working_dir, file_path)
-        norm_file = os.path.normpath(full_dir)
-        valid_target_dir = os.path.commonpath([abs_working_dir, norm_file]) == abs_working_dir
-    except Exception as e:
-        return f"Error: {e}"
+    norm_file, valid_target_dir = path_norm_valid(working_directory, file_path)
 
     if not valid_target_dir:
         return f'Error: Cannot list "{file_path}" as it is outside the permitted working directory'
